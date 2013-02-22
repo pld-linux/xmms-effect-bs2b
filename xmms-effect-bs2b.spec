@@ -27,14 +27,18 @@ efektu XMMS-a.
 %setup -q -n xmms-bs2b-%{version}
 
 %build
-%configure
-%{__make}
+CPPFLAGS="%{rpmcppflags} $(pkg-config --cflags glib libbs2b)"
+%configure \
+	--with-plugin=%{_includedir}/xmms
+%{__make} \
+	libdir=%{xmms_effect_plugindir}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	libdir=%{xmms_effect_plugindir}
 
 %{__rm} $RPM_BUILD_ROOT%{xmms_effect_plugindir}/*.la
 
